@@ -79,24 +79,24 @@ func (g *GRPCServerConfig) GetGRPCServerOpts() ([]grpc.ServerOption, error) {
 }
 
 func (g *GRPCServerConfig) getKAEP() keepalive.EnforcementPolicy {
-	if (keepalive.EnforcementPolicy{}) != g.KeepAliveConfig.KAEP {
-		return g.KeepAliveConfig.KAEP
+	if g.KeepAliveConfig == nil || (keepalive.EnforcementPolicy{}) == g.KeepAliveConfig.KAEP {
+		return DefaultKAEP
 	}
-	return DefaultKAEP
+	return g.KeepAliveConfig.KAEP
 }
 
 func (g *GRPCServerConfig) getKACP() keepalive.ClientParameters {
-	if (keepalive.ClientParameters{}) != g.KeepAliveConfig.KACP {
-		return g.KeepAliveConfig.KACP
+	if g.KeepAliveConfig == nil || (keepalive.ClientParameters{}) == g.KeepAliveConfig.KACP {
+		return DefaultKACP
 	}
-	return DefaultKACP
+	return g.KeepAliveConfig.KACP
 }
 
 func (g *GRPCServerConfig) getKASP() keepalive.ServerParameters {
-	if (keepalive.ServerParameters{}) != g.KeepAliveConfig.KASP {
-		return g.KeepAliveConfig.KASP
+	if g.KeepAliveConfig == nil || (keepalive.ServerParameters{}) == g.KeepAliveConfig.KASP {
+		return DefaultKASP
 	}
-	return DefaultKASP
+	return g.KeepAliveConfig.KASP
 }
 
 func (g *GRPCServerConfig) GetGRPCDialOpts() ([]grpc.DialOption, error) {
