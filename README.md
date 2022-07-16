@@ -2,7 +2,15 @@
 
 ## GOEasy
 
-A collection of utility packages aimed at reducing/eliminating setup toil for various workflows in golang.
+A collection of utility modules aimed at reducing/eliminating setup toil for various workflows in golang.
+
+The primary goals of these modules are to provide:
+
+* Simple APIs
+* Declarative paradigm where possible
+* Easily pluggable with standard API
+
+Using these modules will result in a simpler, cleaner codebase with little to no learning curve.
 
 ### grpcutils
 
