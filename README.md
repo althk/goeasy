@@ -2,7 +2,7 @@
 
 ## GOEasy
 
-A collection of utility packages aimed at reducing/eliminating GRPC and other server boilerplate setup.
+A collection of utility packages aimed at reducing/eliminating setup toil for various workflows in golang.
 
 ### grpcutils
 
