@@ -15,7 +15,6 @@ The example below sets up a GRPC server with the following options enabled:
 * OpenCensus zpages handler for viewing metrics
 * OpenTelemetry default tracer with export to opentelemetry collector with support for end-to-end remote traces.
 
-
 ```go
 import (
   "google.golang.org/grpc/keepalive"
