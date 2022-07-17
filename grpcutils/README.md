@@ -6,6 +6,16 @@ Provides handy functions that help setting up a new GRPC Server extremely simple
 
 ### Example
 
+The example below sets up a GRPC server with the following options enabled:
+
+* mutual TLS or server side TLS
+* zerolog GRPC server interceptor
+* client and server keepalive setup
+* OpenCensus basic metrics (rpc counts)
+* OpenCensus zpages handler for viewing metrics
+* OpenTelemetry default tracer with export to opentelemetry collector with support for end-to-end remote traces.
+
+
 ```go
 import (
   "google.golang.org/grpc/keepalive"
