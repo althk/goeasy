@@ -51,7 +51,7 @@ func (s *FIFOSched) Init() error {
 	return nil
 }
 
-func (s *FIFOSched) EnqueueTask(t Task) error {
+func (s *FIFOSched) EnqueueTask(t Task, _ ...TaskOption) error {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	if !s.ready {

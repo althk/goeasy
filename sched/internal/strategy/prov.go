@@ -4,6 +4,13 @@ package strategy
 // It has to be thread-safe.
 type Task func()
 
+// TaskOptions captures options for the current task
+type TaskOption func(opts *TaskConfig)
+
+type TaskConfig struct {
+	Priority Priority
+}
+
 // TaskScheduler is the interface that wraps
 // task scheduling API.
 //
@@ -25,7 +32,11 @@ type TaskScheduler interface {
 	// The task execution may vary between implementations
 	// and in some cases may not be gauranteed to run (again
 	// depends on implementation).
-	EnqueueTask(t Task) error
+	//
+	// opts are one or more `TaskOption`s which are available
+	// via the sched package. Some schedulers might not need
+	// any options.
+	EnqueueTask(t Task, opts ...TaskOption) error
 
 	// Shutdown shuts down the scheduler.
 	//
@@ -42,4 +53,12 @@ type TaskScheduler interface {
 	// IsReady returns true if the scheduler has been initialized
 	// and ready for enqueing tasks.
 	IsReady() bool
+}
+
+func taskConfig(opts ...TaskOption) *TaskConfig {
+	taskCfg := &TaskConfig{}
+	for _, opt := range opts {
+		opt(taskCfg)
+	}
+	return taskCfg
 }
