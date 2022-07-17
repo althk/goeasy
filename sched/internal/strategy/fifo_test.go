@@ -1,4 +1,4 @@
-package sched
+package strategy
 
 import (
 	"fmt"
@@ -8,12 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/althk/goeasy/sched/internal/strategy"
 	"github.com/stretchr/testify/require"
 )
 
-var s strategy.TaskScheduler
-var testTask strategy.Task
+var s TaskScheduler
+var testTask Task
 var c uint32
 var mu sync.Mutex
 
@@ -28,7 +27,7 @@ func TestFIFOScheduler_Init(t *testing.T) {
 	require.NoError(t, s.Shutdown(true))
 }
 
-func newFIFOWithTasks(t *testing.T) strategy.TaskScheduler {
+func newFIFOWithTasks(t *testing.T) TaskScheduler {
 	s = NewFIFO(5, 1)
 	s.Init()
 	// Enqueue 4 tasks, verify by the counter.
