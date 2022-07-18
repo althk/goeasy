@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-  var tlsConfig = &TLSConfig{
+  var tlsConfig = &grpcutils.TLSConfig{
     CertFilePath:     "path/to/crt",
     KeyFilePath:      "path/to/key",
     ClientCAFilePath: "path/to/clientca.crt",
@@ -31,14 +31,14 @@ func main() {
     NoClientCert:     false, // Setting this to true turns off mutual TLS auth and does only server auth
   }
 
-  var kaConfig = &KeepAliveConfig{
+  var kaConfig = &grpcutils.KeepAliveConfig{
     KASP:          keepalive.ServerParameters{},  // Skipping this or sending the empty struct will initialize with default values
     KACP:          keepalive.ClientParameters{}, // Skipping this or sending the empty struct will initialize with default values
     KAEP:          keepalive.EnforcementPolicy{}, // Skipping this or sending the empty struct will initialize with default values
     SkipKeepAlive: false,  // Setting this to true skips KeepAlive
   }
 
-  var grpcConfig = &GRPCServerConfig{
+  var grpcConfig = &grpcutils.GRPCServerConfig{
     TLSConfig:        tlsConfig,
     SkipReflection:   false,
     SkipHealthServer: false,
@@ -53,13 +53,16 @@ func main() {
   }
   // register your service with grpcServer
   pb.RegisterMyServiceServer(grpcServer, *myServiceServer)
+
   // start an OpenTelemetry Tracer
+  // this will export the traces to an OpenTelemetry Collector server running at
+  // otelcollector1:4317
   tp, err := grpcutils.OTelTraceProvider("my-service-name", "otelcollector1:4317")
   if err != nil {
     // handle error
   }
   defer func() {
-    if err := shutdownFn(context.Background()); err != nil {
+    if err := tp.Shutdown(context.Background()); err != nil {
      log.Printf("Error shutting down tracer provider: %v", err)
     }
   }()
