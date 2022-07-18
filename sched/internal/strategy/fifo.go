@@ -15,7 +15,6 @@ type FIFOSched struct {
 	maxTasks       uint
 	maxConcurrency uint
 	taskQ          chan Task
-	workerPool     chan int
 	quitCh         chan bool
 	ready          bool
 	mu             sync.RWMutex
@@ -87,7 +86,6 @@ func NewFIFO(maxTasks, maxConcurrency uint) TaskScheduler {
 		maxTasks:       maxTasks,
 		maxConcurrency: maxConcurrency,
 		taskQ:          make(chan Task, maxTasks),
-		workerPool:     make(chan int, maxConcurrency),
 		quitCh:         make(chan bool),
 	}
 }
