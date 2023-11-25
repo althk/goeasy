@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
@@ -87,7 +87,7 @@ func (c *TLSConfig) setClientCAs(cfg *tls.Config) error {
 // newCertPool creates a new CertPool and appends the cert
 // at the given path to the pool.
 func newCertPool(caPath string) (*x509.CertPool, error) {
-	pemData, err := ioutil.ReadFile(caPath)
+	pemData, err := os.ReadFile(caPath)
 	if err != nil {
 		return nil, err
 	}
