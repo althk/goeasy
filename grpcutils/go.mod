@@ -1,6 +1,6 @@
 module github.com/althk/goeasy/grpcutils
 
-go 1.18
+go 1.21.0
 
 require (
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/zerolog/v2 v2.0.0-rc.2
