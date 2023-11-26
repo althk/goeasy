@@ -8,7 +8,6 @@ import (
 	grpczerolog "github.com/grpc-ecosystem/go-grpc-middleware/providers/zerolog/v2"
 	middleware "github.com/grpc-ecosystem/go-grpc-middleware/v2"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/tags"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"go.opencensus.io/plugin/ocgrpc"
@@ -120,7 +119,6 @@ func (g *GRPCServerConfig) GetGRPCDialOpts() ([]grpc.DialOption, error) {
 func (g *GRPCServerConfig) getServerInterceptorChain() grpc.ServerOption {
 	logger := zerolog.New(os.Stdout)
 	return middleware.WithUnaryServerChain(
-		tags.UnaryServerInterceptor(),
 		logging.UnaryServerInterceptor(grpczerolog.InterceptorLogger(logger)),
 		getUnaryServerTraceInterceptor(),
 	)
