@@ -1,12 +1,12 @@
 package grpcutils
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
 
-	grpczerolog "github.com/grpc-ecosystem/go-grpc-middleware/providers/zerolog/v2"
-	middleware "github.com/grpc-ecosystem/go-grpc-middleware/v2"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -117,9 +117,14 @@ func (g *GRPCServerConfig) GetGRPCDialOpts() ([]grpc.DialOption, error) {
 }
 
 func (g *GRPCServerConfig) getServerInterceptorChain() grpc.ServerOption {
-	logger := zerolog.New(os.Stdout)
-	return middleware.WithUnaryServerChain(
-		logging.UnaryServerInterceptor(grpczerolog.InterceptorLogger(logger)),
+	logger := zerolog.New(os.Stderr)
+
+	opts := []logging.Option{
+		logging.WithLogOnEvents(logging.StartCall, logging.FinishCall),
+		// Add any other option (check functions starting with logging.With).
+	}
+	return grpc.ChainUnaryInterceptor(
+		logging.UnaryServerInterceptor(InterceptorLogger(logger), opts...),
 		getUnaryServerTraceInterceptor(),
 	)
 }
@@ -156,4 +161,24 @@ func (g *GRPCServerConfig) NewGRPCServer() (*grpc.Server, error) {
 		}()
 	}
 	return s, nil
+}
+
+// InterceptorLogger adapts zerolog logger to interceptor logger.
+func InterceptorLogger(l zerolog.Logger) logging.Logger {
+	return logging.LoggerFunc(func(ctx context.Context, lvl logging.Level, msg string, fields ...any) {
+		l := l.With().Fields(fields).Logger()
+
+		switch lvl {
+		case logging.LevelDebug:
+			l.Debug().Msg(msg)
+		case logging.LevelInfo:
+			l.Info().Msg(msg)
+		case logging.LevelWarn:
+			l.Warn().Msg(msg)
+		case logging.LevelError:
+			l.Error().Msg(msg)
+		default:
+			panic(fmt.Sprintf("unknown level %v", lvl))
+		}
+	})
 }

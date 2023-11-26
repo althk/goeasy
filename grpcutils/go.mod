@@ -3,7 +3,6 @@ module github.com/althk/goeasy/grpcutils
 go 1.21.0
 
 require (
-	github.com/grpc-ecosystem/go-grpc-middleware/providers/zerolog/v2 v2.0.0-rc.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/rs/zerolog v1.31.0
 	go.opencensus.io v0.24.0
@@ -15,6 +14,7 @@ require (
 )
 
 require (
+	cloud.google.com/go/compute v1.23.3 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/go-logr/logr v1.3.0 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
